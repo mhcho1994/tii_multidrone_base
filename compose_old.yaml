@@ -1,0 +1,62 @@
+version: "3.9"
+
+networks:
+  # create a local network
+  app_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "172.16.238.0/24"
+
+services:
+  # drone (PX4/ROS2/Gazebo) simulator
+  drones:
+    container_name: drones
+    hostname: drones
+    image: tii_multidrone_sim:latest
+    build:
+      context: .
+      dockerfile: ./dronesim/Dockerfile
+      # set the host uid/gid information as environmental variables
+      args:
+        HOST_USER_NAME: ${CONTAINER_USER_NAME}
+        HOST_USER_ID: ${CONTAINER_USER_ID}
+        HOST_GROUP_NAME: ${CONTAINER_GROUP_NAME}
+        HOST_GROUP_ID: ${CONTAINER_GROUP_ID}
+    environment:
+      - DISPLAY=${DISPLAY}
+      # Purdue location (lat, lon, alt) - reference point
+      - PX4_HOME_LAT=40.41537099446224
+      - PX4_HOME_LON=-86.93289541090424
+      - PX4_HOME_ALT=35
+      # GZ world
+      - PX4_GZ_WORLD=default
+      # Drone1
+      - INSTANCE_SIGN_1=1
+      - PX4_GZ_MODEL_1=x500
+      - PX4_GZ_MODEL_POSE_1=0,0,0,0,0,0
+      - PX4_UXRCE_DDS_NS_1=px4_1
+      - ROS_DOMAIN_ID_1=1
+
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+      - ./dronesim/bin:/home/docker/bin:ro
+      - ./dronesim/drone/px4:/home/docker/px4:rw
+      # - ./dronesim/drone/onboard:/home/docker/onboard:rw
+
+    command: terminator --geometry=800x500+800+0
+    privileged: true
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+    ipc: host
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    networks:
+      app_net:
+        ipv4_address: 172.16.238.2
