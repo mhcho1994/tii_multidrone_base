@@ -34,12 +34,17 @@ services:
     - PX4_GZ_MODEL_POSE_2=0,2,0,0,0,0
     - PX4_MICRODDS_NS_2=px4_2
     - ROS_DOMAIN_ID_2=px4_2
+    - INSTANCE_SIGN_3=3
+    - PX4_GZ_MODEL_3=x500
+    - PX4_GZ_MODEL_POSE_3=0,4,0,0,0,0
+    - PX4_MICRODDS_NS_3=px4_3
+    - ROS_DOMAIN_ID_3=px4_3
     volumes:
     - /tmp/.X11-unix:/tmp/.X11-unix:ro
     - ./dronesim/bin:/home/docker/bin:ro
     - ./dronesim/drone/px4:/home/docker/px4:rw
     - ./dronesim/drone/onboard:/home/docker/onboard:rw
-    command: terminator --geometry=800x500+800+0
+    command: terminator --geometry=800x500+800+0 -e "python3 /home/docker/bin/px4_multirun.py; read -p 'press enter to close'"
     privileged: true
     sysctls:
     - net.ipv6.conf.all.disable_ipv6=0

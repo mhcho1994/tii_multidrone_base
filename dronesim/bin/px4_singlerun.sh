@@ -13,4 +13,4 @@ fi
 
 # run px4 and gazebo simulation
 cd ~/px4
-PX4_SYS_AUTOSTART=4001 PX4_GZ_MODEL_POSE=${PX4_GZ_MODEL_POSE_1} PX4_GZ_MODEL=${PX4_GZ_MODEL_1} ./build/px4_sitl_default/bin/px4 -i ${INSTANCE_SIGN_1}
+PX4_SYS_AUTOSTART=4001 PX4_GZ_MODEL_POSE=${PX4_GZ_MODEL_POSE} PX4_GZ_MODEL=${PX4_GZ_MODEL} ./build/px4_sitl_default/bin/px4 -i ${INSTANCE_SIGN}

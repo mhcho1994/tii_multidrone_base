@@ -1,5 +1,4 @@
 version: "3.9"
-
 networks:
   # create a local network
   app_net:
@@ -7,7 +6,6 @@ networks:
     ipam:
       config:
         - subnet: "172.16.238.0/24"
-
 services:
   # drone (PX4/ROS2/Gazebo) simulator
   drones:
@@ -37,19 +35,16 @@ services:
       - PX4_GZ_MODEL_POSE_1=0,0,0,0,0,0
       - PX4_UXRCE_DDS_NS_1=px4_1
       - ROS_DOMAIN_ID_1=1
-
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:ro
       - ./dronesim/bin:/home/docker/bin:ro
       - ./dronesim/drone/px4:/home/docker/px4:rw
       # - ./dronesim/drone/onboard:/home/docker/onboard:rw
-
     command: terminator --geometry=800x500+800+0
     privileged: true
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
     ipc: host
-
     deploy:
       resources:
         reservations:
