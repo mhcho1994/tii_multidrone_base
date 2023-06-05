@@ -97,3 +97,8 @@ RUN sudo rm /etc/apt/apt.conf.d/docker-clean
 
 # create XDG runtime dir
 RUN mkdir /tmp/runtime-docker && sudo chmod 700 /tmp/runtime-docker
+
+# run setup script
+COPY --chown=docker:docker /dronesim/install/setup.sh /tmp/install/setup.sh
+RUN chmod +x /tmp/install/setup.sh
+RUN bash /tmp/install/setup.sh

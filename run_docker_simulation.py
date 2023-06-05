@@ -26,3 +26,4 @@ os.environ["CONTAINER_USER_NAME"] = container_user_name
 os.environ["CONTAINER_USER_ID"] = str(container_user_id)
 os.environ["CONTAINER_GROUP_NAME"] = container_group_name
 os.environ["CONTAINER_GROUP_ID"] = str(container_group_id)
+os.system('docker compose up')

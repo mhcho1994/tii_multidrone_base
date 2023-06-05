@@ -24,4 +24,9 @@ sudo apt-get -y --no-install-recommends install \
 	terminator \
 	vim
 
-sudo pip3 install pykwalify
+pip3 install pykwalify
+pip3 install transforms3d
+
+# setuptools version 58.2.0 is the last version that works with ROS2 
+# python packages without any warnings
+pip3 install setuptools==58.2.0

@@ -1,3 +1,8 @@
-# Cloned from the original repositories
+# Cloned from the original repositories (do not have to commit)
 /dronesim/drone/px4/
-/dronesim/drone/onboard/
+/dronesim/drone/onboard/src/px4_msgs
+
+# ROS2 build
+/dronesim/drone/onboard/build
+/dronesim/drone/onboard/install
+/dronesim/drone/onboard/log

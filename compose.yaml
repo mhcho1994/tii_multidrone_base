@@ -44,7 +44,8 @@ services:
     - ./dronesim/bin:/home/docker/bin:ro
     - ./dronesim/drone/px4:/home/docker/px4:rw
     - ./dronesim/drone/onboard:/home/docker/onboard:rw
-    command: terminator --geometry=800x500+800+0 -e "python3 /home/docker/bin/px4_multirun.py; read -p 'press enter to close'"
+    command: terminator --geometry=800x500+800+0 -e "python3 bin/px4_multirun.py;
+      read -p 'press enter'"
     privileged: true
     sysctls:
     - net.ipv6.conf.all.disable_ipv6=0

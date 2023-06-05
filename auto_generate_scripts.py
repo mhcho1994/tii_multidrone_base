@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import sys
 import yaml
 
@@ -31,7 +33,7 @@ def generate_compose(base_yaml_file,num_drones):
 def generate_autorun_script(num_drones):
 
     # initialize shell script
-    script_content = f"#!/usr/bin/env python3 \n\nimport time \nimport subprocess \nimport os \nimport time\n\n"
+    script_content = f"#!/usr/bin/python3 \n\nimport time \nimport subprocess \nimport os \nimport time\n\n"
 
     # build px4 if necessary
     script_content += f"# check whether px4 is already built \ndef check_build(directory_path): \n\tif not os.path.exists(directory_path+'/build'):\
@@ -41,17 +43,17 @@ def generate_autorun_script(num_drones):
     script_content += f"# open terminator \ndef open_terminator(command): \n\tsubprocess.Popen(['terminator', '--new-tab', '-e', command]) \n\n"
 
     # main function
-    script_content += f"# main function \nif __name__ == '__main__': \n\tpx4_directory = '/home/docker/px4' \n\tcheck_build(px4_directory) \n"
-    script_content += f"\trun_commands = [\n"
+    script_content += f"# main function \nif __name__ == '__main__': \n\t# px4 build check \n\tpx4_directory = '/home/docker/px4' \n\tcheck_build(px4_directory) \n"
+    script_content += f"\t# Open Terminator shells and run the commands \n\trun_commands = [\n"
 
     for i in range(num_drones):
         if i == num_drones-1:
-            script_content += "\t\t'cd ~/px4; PX4_SYS_AUTOSTART=4001 PX4_GZ_MODEL_POSE=${PX4_GZ_MODEL_POSE_"+str(i+1)+"} PX4_GZ_MODEL=${PX4_GZ_MODEL_"+str(i+1)+"} ./build/px4_sitl_default/bin/px4 -i ${INSTANCE_SIGN_"+str(i+1)+"}']"
+            script_content += "\t\t'cd ~/px4; PX4_SYS_AUTOSTART=4001 PX4_GZ_MODEL_POSE=${PX4_GZ_MODEL_POSE_"+str(i+1)+"} PX4_GZ_MODEL=${PX4_GZ_MODEL_"+str(i+1)+"} ./build/px4_sitl_default/bin/px4 -i ${INSTANCE_SIGN_"+str(i+1)+"}']\n"
 
         else:
             script_content += "\t\t'cd ~/px4; PX4_SYS_AUTOSTART=4001 PX4_GZ_MODEL_POSE=${PX4_GZ_MODEL_POSE_"+str(i+1)+"} PX4_GZ_MODEL=${PX4_GZ_MODEL_"+str(i+1)+"} ./build/px4_sitl_default/bin/px4 -i ${INSTANCE_SIGN_"+str(i+1)+"},',\n"
 
-    script_content += "\t# Open Terminator shells and run the commands \n\tfor command in run_commands: \n\t\topen_terminator(command) \n\t\ttime.sleep(1.2)"
+    script_content += "\tfor command in run_commands: \n\t\topen_terminator(command) \n\t\ttime.sleep(1.5)"
 
     return script_content
 
