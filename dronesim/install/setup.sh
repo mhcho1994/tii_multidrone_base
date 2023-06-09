@@ -13,3 +13,7 @@ else
     echo "LIne 'source /opt/ros/humble/setup.bash' already present in .bashrc"
 
 fi
+
+# initialize rosdep
+sudo rosdep init
+rosdep update

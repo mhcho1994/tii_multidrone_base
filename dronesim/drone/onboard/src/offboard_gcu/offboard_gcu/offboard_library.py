@@ -15,7 +15,7 @@ class flight_management():
     def load_parameters(self):
 
         # set the number of drones
-        self.num_drones                             =   numpy.uint8(3)
+        self.num_drones                             =   numpy.uint8(1)
 
         # initialize parameters for flight management module
         self.nav_xy_accept_rad_                     =   numpy.float32(2.0)
@@ -44,7 +44,7 @@ class flight_management():
         self.ARMING_ACTION_DISARM_ 					=	numpy.uint8(0)
         self.ARMING_ACTION_ARM_ 					=	numpy.uint8(1)
 
-        # initialize fields of vehicle status topic
+        # initialize fields of vehicle status ARMING_STATE_ARMED_
         self.NAVIGATION_STATE_MANUAL_ 				= 	numpy.uint8(0)
         self.NAVIGATION_STATE_ALTCTL_ 				= 	numpy.uint8(1)
         self.NAVIGATION_STATE_POSCTL_ 				= 	numpy.uint8(2)
@@ -75,3 +75,21 @@ class flight_management():
         self.TAKEOFF_STATE_READY_FOR_TAKEOFF_       =   numpy.uint8(3)
         self.TAKEOFF_STATE_RAMPUP_                  =   numpy.uint8(4)
         self.TAKEOFF_STATE_FLIGHT_                  =   numpy.uint8(5)
+
+        # waypoint reach condition radius
+        self.nav_wpt_reach_rad_                     =   numpy.float32(0.25)
+
+        # observer gain
+        self.Lobv                                   =   numpy.array([[0.62,0.00,0.00],
+                                                                     [0.00,0.62,0.00],
+                                                                     [0.00,0.00,0.62]])
+
+        # detector threshold
+        self.detect_threshold                       =   numpy.float(1.25)
+
+def get_projection_matrix(vector):
+
+    proj_mat    =   numpy.matmul(numpy.atleast_2d(vector).T,numpy.atleast_2d(vector))
+    proj_mat    =   proj_mat/numpy.dot(vector,vector)
+
+    return proj_mat

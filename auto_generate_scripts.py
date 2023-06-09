@@ -43,17 +43,15 @@ def generate_autorun_script(num_drones):
     script_content += f"# open terminator \ndef open_terminator(command): \n\tsubprocess.Popen(['terminator', '--new-tab', '-e', command]) \n\n"
 
     # main function
-    script_content += f"# main function \nif __name__ == '__main__': \n\t# px4 build check \n\tpx4_directory = '/home/docker/px4' \n\tcheck_build(px4_directory) \n"
+    script_content += f"# main function \nif __name__ == '__main__': \n\t# px4 build check \n\tpx4_directory = '/home/docker/px4' \n\tcheck_build(px4_directory) \n\n"
     script_content += f"\t# Open Terminator shells and run the commands \n\trun_commands = [\n"
 
     for i in range(num_drones):
-        if i == num_drones-1:
-            script_content += "\t\t'cd ~/px4; PX4_SYS_AUTOSTART=4001 PX4_GZ_MODEL_POSE=${PX4_GZ_MODEL_POSE_"+str(i+1)+"} PX4_GZ_MODEL=${PX4_GZ_MODEL_"+str(i+1)+"} ./build/px4_sitl_default/bin/px4 -i ${INSTANCE_SIGN_"+str(i+1)+"}']\n"
+        script_content += "\t\t'cd ~/px4; PX4_SYS_AUTOSTART=4001 PX4_GZ_MODEL_POSE=${PX4_GZ_MODEL_POSE_"+str(i+1)+"} PX4_GZ_MODEL=${PX4_GZ_MODEL_"+str(i+1)+"} ./build/px4_sitl_default/bin/px4 -i ${INSTANCE_SIGN_"+str(i+1)+"}',\n"
 
-        else:
-            script_content += "\t\t'cd ~/px4; PX4_SYS_AUTOSTART=4001 PX4_GZ_MODEL_POSE=${PX4_GZ_MODEL_POSE_"+str(i+1)+"} PX4_GZ_MODEL=${PX4_GZ_MODEL_"+str(i+1)+"} ./build/px4_sitl_default/bin/px4 -i ${INSTANCE_SIGN_"+str(i+1)+"},',\n"
+    script_content += "\t\t'MicroXRCEAgent udp4 -p 8888']\n\n"
 
-    script_content += "\tfor command in run_commands: \n\t\topen_terminator(command) \n\t\ttime.sleep(1.5)"
+    script_content += "\tfor idx, command in enumerate(run_commands): \n\t\tif idx=="+str(num_drones)+": \n\t\t\ttime.sleep(5.0) \n\t\t\topen_terminator(command) \n\t\telse: \n\t\t\ttime.sleep(1.5) \n\t\t\topen_terminator(command)"
 
     return script_content
 

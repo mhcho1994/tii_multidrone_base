@@ -9,9 +9,9 @@ networks:
 services:
   # drone (PX4/ROS2/Gazebo) simulator
   drones:
-    container_name: drones
-    hostname: drones
-    image: tii_multidrone_sim:latest
+    container_name: drones_mh
+    hostname: drones_mh
+    image: tii_multidrone_sim_mh:latest
     build:
       context: .
       dockerfile: ./dronesim/Dockerfile
