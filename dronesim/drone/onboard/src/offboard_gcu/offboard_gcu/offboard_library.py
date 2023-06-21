@@ -14,9 +14,6 @@ class flight_management():
     # define controller module parameters
     def load_parameters(self):
 
-        # set the number of drones
-        self.num_drones                             =   numpy.uint8(1)
-
         # initialize parameters for flight management module
         self.nav_xy_accept_rad_                     =   numpy.float32(2.0)
         self.nav_z_accept_rad_                      =   numpy.float32(0.8)
@@ -77,15 +74,7 @@ class flight_management():
         self.TAKEOFF_STATE_FLIGHT_                  =   numpy.uint8(5)
 
         # waypoint reach condition radius
-        self.nav_wpt_reach_rad_                     =   numpy.float32(0.25)
-
-        # observer gain
-        self.Lobv                                   =   numpy.array([[0.62,0.00,0.00],
-                                                                     [0.00,0.62,0.00],
-                                                                     [0.00,0.00,0.62]])
-
-        # detector threshold
-        self.detect_threshold                       =   numpy.float(1.25)
+        self.nav_wpt_reach_rad_                     =   numpy.float32(0.4)
 
 def get_projection_matrix(vector):
 

@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'offboard_fm_module = offboard_gcu.offboard_fm_module:main'
+            'offboard_formation_flight = offboard_gcu.offboard_formation_flight:main'
         ],
     },
 )

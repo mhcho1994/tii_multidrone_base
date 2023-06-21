@@ -1,3 +1,4 @@
+# Base format file for running auto generation script (Do not modify)
 version: "3.9"
 networks:
   # create a local network
@@ -9,9 +10,9 @@ networks:
 services:
   # drone (PX4/ROS2/Gazebo) simulator
   drones:
-    container_name: drones_mh
-    hostname: drones_mh
-    image: tii_multidrone_sim_mh:latest
+    container_name: drones
+    hostname: drones
+    image: tii_multidrone_sim:latest
     build:
       context: .
       dockerfile: ./dronesim/Dockerfile
@@ -29,7 +30,7 @@ services:
       - PX4_HOME_ALT=35
       # GZ world
       - PX4_GZ_WORLD=default
-      # Drones
+      # Drone
       - INSTANCE_SIGN=1
       - PX4_GZ_MODEL=x500
       - PX4_GZ_MODEL_POSE=0,0,0,0,0,0

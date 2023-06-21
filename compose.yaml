@@ -6,7 +6,7 @@ networks:
       config:
       - subnet: 172.16.238.0/24
 services:
-  drones:
+  drones_mh:
     container_name: drones_mh
     hostname: drones_mh
     image: tii_multidrone_sim_mh:latest
@@ -29,6 +29,26 @@ services:
     - PX4_GZ_MODEL_POSE_1=0,0,0,0,0,0
     - PX4_MICRODDS_NS_1=px4_1
     - ROS_DOMAIN_ID_1=px4_1
+    - INSTANCE_SIGN_2=2
+    - PX4_GZ_MODEL_2=x500
+    - PX4_GZ_MODEL_POSE_2=0,2,0,0,0,0
+    - PX4_MICRODDS_NS_2=px4_2
+    - ROS_DOMAIN_ID_2=px4_2
+    - INSTANCE_SIGN_3=3
+    - PX4_GZ_MODEL_3=x500
+    - PX4_GZ_MODEL_POSE_3=0,4,0,0,0,0
+    - PX4_MICRODDS_NS_3=px4_3
+    - ROS_DOMAIN_ID_3=px4_3
+    - INSTANCE_SIGN_4=4
+    - PX4_GZ_MODEL_4=x500
+    - PX4_GZ_MODEL_POSE_4=0,6,0,0,0,0
+    - PX4_MICRODDS_NS_4=px4_4
+    - ROS_DOMAIN_ID_4=px4_4
+    - INSTANCE_SIGN_5=5
+    - PX4_GZ_MODEL_5=x500
+    - PX4_GZ_MODEL_POSE_5=0,8,0,0,0,0
+    - PX4_MICRODDS_NS_5=px4_5
+    - ROS_DOMAIN_ID_5=px4_5
     volumes:
     - /tmp/.X11-unix:/tmp/.X11-unix:ro
     - ./dronesim/bin:/home/docker/bin:ro
