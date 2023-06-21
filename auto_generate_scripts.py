@@ -7,14 +7,20 @@ import argparse
 import numpy
 
 # define functions
-def generate_compose(base_yaml_file,num_drones,identifier):
+def generate_compose(base_yaml_file,num_drones,identifier,private_net):
 
     # parse the base yaml file
     with open(base_yaml_file) as base_file:
         base = yaml.load(base_file,Loader=yaml.FullLoader)
 
+    if private_net != numpy.uint8(0):
+        old_whole_ip=base['networks']['app_net']['ipam']['config'][0]['subnet']
+        new_ip=int(base['networks']['app_net']['ipam']['config'][0]['subnet'][4:6])+private_net
+        new_ip=str(new_ip)
+        base['networks']['app_net']['ipam']['config'][0]['subnet']=base['networks']['app_net']['ipam']['config'][0]['subnet'].replace(base['networks']['app_net']['ipam']['config'][0]['subnet'][4:6],new_ip)
+
     if identifier is not None:
-        base['services']['drones_'+identifier]  =   base['services']['drones']
+        base['services']['drones_'+identifier]=base['services']['drones']
         del base['services']['drones']
 
         base['services']['drones_'+identifier]['container_name']=base['services']['drones_'+identifier]['container_name']+'_'+identifier
@@ -117,11 +123,12 @@ if __name__ == '__main__':
     parser  =   argparse.ArgumentParser(description='Parameters for simulations and running scripts')
     parser.add_argument('--num-drones','-n',type=int,default=numpy.uint8(1),help='number of drones')
     parser.add_argument('--identifier','-i',type=none_or_string,default=None,help='set the identifier to run in a server')
+    parser.add_argument('--private-net','-p',type=int,default=numpy.uint8(0),help='private network address offset')
     arg_in  =   parser.parse_args()
 
     base_yaml_file = 'compose_base.yaml'
    
-    int_yaml_content = generate_compose(base_yaml_file,arg_in.num_drones,arg_in.identifier)
+    int_yaml_content = generate_compose(base_yaml_file,arg_in.num_drones,arg_in.identifier,arg_in.private_net)
 
     with open('compose.yaml', 'w') as f:
         yaml.dump(int_yaml_content,f,sort_keys=False)
