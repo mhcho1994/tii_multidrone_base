@@ -6,7 +6,7 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: "172.16.238.0/24"
+        - subnet: "172.16.0.0/24"
 services:
   # drone (PX4/ROS2/Gazebo) simulator
   drones:
@@ -55,4 +55,4 @@ services:
               capabilities: [gpu]
     networks:
       app_net:
-        ipv4_address: 172.16.238.2
+        ipv4_address: 172.16.0.2

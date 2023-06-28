@@ -14,10 +14,18 @@ def generate_compose(base_yaml_file,num_drones,identifier,private_net):
         base = yaml.load(base_file,Loader=yaml.FullLoader)
 
     if private_net != numpy.uint8(0):
-        old_whole_ip=base['networks']['app_net']['ipam']['config'][0]['subnet']
-        new_ip=int(base['networks']['app_net']['ipam']['config'][0]['subnet'][4:6])+private_net
-        new_ip=str(new_ip)
-        base['networks']['app_net']['ipam']['config'][0]['subnet']=base['networks']['app_net']['ipam']['config'][0]['subnet'].replace(base['networks']['app_net']['ipam']['config'][0]['subnet'][4:6],new_ip)
+
+        dotidx = []
+        for pos, char in enumerate(base['networks']['app_net']['ipam']['config'][0]['subnet']):
+            if char == '.':
+                dotidx.append(pos)
+        new_ip_subsitute=int(base['networks']['app_net']['ipam']['config'][0]['subnet'][dotidx[-2]+1:dotidx[-1]])+private_net
+        new_ip_subsitute=str(new_ip_subsitute)
+        new_ip=base['networks']['app_net']['ipam']['config'][0]['subnet'][:dotidx[-2]+1]+new_ip_subsitute+base['networks']['app_net']['ipam']['config'][0]['subnet'][dotidx[-1]:]
+        new_container_ip=base['services']['drones']['networks']['app_net']['ipv4_address'][:dotidx[-2]+1]+new_ip_subsitute+base['services']['drones']['networks']['app_net']['ipv4_address'][dotidx[-1]:]
+
+        base['networks']['app_net']['ipam']['config'][0]['subnet']=new_ip
+        base['services']['drones']['networks']['app_net']['ipv4_address']=new_container_ip
 
     if identifier is not None:
         base['services']['drones_'+identifier]=base['services']['drones']
@@ -35,7 +43,7 @@ def generate_compose(base_yaml_file,num_drones,identifier,private_net):
             base['services']['drones_'+identifier]['environment'][7]='PX4_GZ_MODEL_POSE=0,0,0,0,0,0'
             base['services']['drones_'+identifier]['environment'][6]='PX4_GZ_MODEL=x500'
             del base['services']['drones_'+identifier]['environment'][5]
-        
+
         else:
             for i in range(num_drones):
                 if i == 0:
@@ -60,7 +68,7 @@ def generate_compose(base_yaml_file,num_drones,identifier,private_net):
             base['services']['drones']['environment'][7]='PX4_GZ_MODEL_POSE=0,0,0,0,0,0'
             base['services']['drones']['environment'][6]='PX4_GZ_MODEL=x500'
             del base['services']['drones']['environment'][5]
-        
+
         else:
             for i in range(num_drones):
                 if i == 0:
@@ -76,10 +84,10 @@ def generate_compose(base_yaml_file,num_drones,identifier,private_net):
                     base['services']['drones']['environment'].insert(7+5*i,'PX4_GZ_MODEL_POSE_'+str(i+1)+'=0,'+str(2*i)+',0,0,0,0')
                     base['services']['drones']['environment'].insert(8+5*i,'PX4_MICRODDS_NS_'+str(i+1)+'=px4_'+str(i+1))
                     base['services']['drones']['environment'].insert(9+5*i,'ROS_DOMAIN_ID_'+str(i+1)+'=px4_'+str(i+1))
-            
+
     # generate the Docker Compose YAML content
     yaml_content = base
-   
+
     return yaml_content
 
 def generate_autorun_script(num_drones):
@@ -100,7 +108,7 @@ def generate_autorun_script(num_drones):
 
     if num_drones == 1:
          script_content += "\t\t'cd ~/px4; PX4_SYS_AUTOSTART=4001 PX4_GZ_MODEL_POSE=${PX4_GZ_MODEL_POSE} PX4_GZ_MODEL=${PX4_GZ_MODEL} ./build/px4_sitl_default/bin/px4',\n"
-         
+
     else:
         for i in range(num_drones):
             script_content += "\t\t'cd ~/px4; PX4_SYS_AUTOSTART=4001 PX4_GZ_MODEL_POSE=${PX4_GZ_MODEL_POSE_"+str(i+1)+"} PX4_GZ_MODEL=${PX4_GZ_MODEL_"+str(i+1)+"} ./build/px4_sitl_default/bin/px4 -i ${INSTANCE_SIGN_"+str(i+1)+"}',\n"
@@ -114,20 +122,20 @@ def generate_autorun_script(num_drones):
 def none_or_string(value):
     if value == 'None':
         return None
-    
+
     return value
 
 # main
 if __name__ == '__main__':
     # Get the command-line arguments and parse
     parser  =   argparse.ArgumentParser(description='Parameters for simulations and running scripts')
-    parser.add_argument('--num-drones','-n',type=int,default=numpy.uint8(1),help='number of drones')
-    parser.add_argument('--identifier','-i',type=none_or_string,default=None,help='set the identifier to run in a server')
-    parser.add_argument('--private-net','-p',type=int,default=numpy.uint8(0),help='private network address offset')
+    parser.add_argument('--num-drones','-n',type=int,default=numpy.uint8(1),help='number of drones (ex. 3)')
+    parser.add_argument('--identifier','-i',type=none_or_string,default=None,help='set the identifier to run in a server (ex. aa, bb, cc)')
+    parser.add_argument('--private-net','-p',type=int,default=numpy.uint8(0),help='private network address offset (integer 0 - 9)')
     arg_in  =   parser.parse_args()
 
     base_yaml_file = 'compose_base.yaml'
-   
+
     int_yaml_content = generate_compose(base_yaml_file,arg_in.num_drones,arg_in.identifier,arg_in.private_net)
 
     with open('compose.yaml', 'w') as f:

@@ -4,12 +4,12 @@ networks:
     driver: bridge
     ipam:
       config:
-      - subnet: 172.16.238.0/24
+      - subnet: 172.16.3.0/24
 services:
-  drones:
-    container_name: drones
-    hostname: drones
-    image: tii_multidrone_sim:latest
+  drones_mh:
+    container_name: drones_mh
+    hostname: drones_mh
+    image: tii_multidrone_sim_mh:latest
     build:
       context: .
       dockerfile: ./dronesim/Dockerfile
@@ -24,8 +24,21 @@ services:
     - PX4_HOME_LON=-86.93289541090424
     - PX4_HOME_ALT=35
     - PX4_GZ_WORLD=default
-    - PX4_GZ_MODEL=x500
-    - PX4_GZ_MODEL_POSE=0,0,0,0,0,0
+    - INSTANCE_SIGN_1=1
+    - PX4_GZ_MODEL_1=x500
+    - PX4_GZ_MODEL_POSE_1=0,0,0,0,0,0
+    - PX4_MICRODDS_NS_1=px4_1
+    - ROS_DOMAIN_ID_1=px4_1
+    - INSTANCE_SIGN_2=2
+    - PX4_GZ_MODEL_2=x500
+    - PX4_GZ_MODEL_POSE_2=0,2,0,0,0,0
+    - PX4_MICRODDS_NS_2=px4_2
+    - ROS_DOMAIN_ID_2=px4_2
+    - INSTANCE_SIGN_3=3
+    - PX4_GZ_MODEL_3=x500
+    - PX4_GZ_MODEL_POSE_3=0,4,0,0,0,0
+    - PX4_MICRODDS_NS_3=px4_3
+    - ROS_DOMAIN_ID_3=px4_3
     volumes:
     - /tmp/.X11-unix:/tmp/.X11-unix:ro
     - ./dronesim/bin:/home/docker/bin:ro
@@ -47,4 +60,4 @@ services:
             - gpu
     networks:
       app_net:
-        ipv4_address: 172.16.238.2
+        ipv4_address: 172.16.3.2
