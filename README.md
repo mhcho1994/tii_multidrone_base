@@ -10,7 +10,7 @@ Note that python3 needs to be installed to use an automatic build and a launch s
 python3 auto_generate_scripts.py -n (number_of_drones) -i (your_indicator) -p (network_address_offset)
 ```
 
-where '(number_of_drones)' denotes the number of drones that you want to launch in a simulation and '(your_indicator)' and '(network_address_offset)' arguments stand for your the suffix to indicate your own container name and the network address offset for your container network. '-i' and '-p' options can be used for the different users in a server running this environments. This is to prevent a container from network and container name overlap.
+where '(number_of_drones)' denotes the number of drones that you want to launch in a simulation and '(your_indicator)' and '(network_address_offset)' arguments stand for your the suffix to indicate your own container name and the network address offset for your container network. '-i' and '-p' options can be used for the different users in a server running this environments. This is to prevent a container from network and container name overlap. For example, ```python3 auto_generate_scripts.py -n 5 -i mh -p 3``` will create a container 'drones_mh' with 5 drones, which has an IP address 172.16.3.2 (subnet 172.16.3.0 - 172.16.3.255).
 
 2. To launch the simulation automatically,
 
