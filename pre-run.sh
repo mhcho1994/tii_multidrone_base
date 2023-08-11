@@ -8,12 +8,10 @@ if [ ! -d ./dronesim/drone/px4 ]; then
     fi
 
     cd dronesim/drone
-    git clone https://github.com/PX4/PX4-Autopilot.git px4
+    git clone https://github.com/melodylylin/PX4-Autopilot.git px4
     cd px4
-    git checkout tags/v1.14.0-beta2
+    git tag v1.14.0-beta2
     cd ../../..
-    cp config/AbuDhabi.sdf ./dronesim/drone/px4/Tools/simulation/gz/worlds/default.sdf
-    cp -r config/media/ ./dronesim/drone/px4/Tools/simulation/gz/worlds/
 fi
 
 # check whether the px4_msgs source code is included in the drone/onboard folder
