@@ -7,6 +7,11 @@ if not os.path.isdir("./dronesim/drone/px4"):
     os.makedirs("./dronesim/drone/px4")
     subprocess.run(["git", "clone", "https://github.com/PX4/PX4-Autopilot.git", "./dronesim/drone/px4"])
     subprocess.run(["git", "checkout", "tags/v1.14.0-beta2"], cwd="./dronesim/drone/px4")
+    #subprocess.run(["mkdir", "-p", "Tools/simulation/gz/worlds/media"], cwd="./dronesim/drone/px4")
+    print('copy media')
+    subprocess.run(["cp", "-r", "./config/media/", "./dronesim/drone/px4/Tools/simulation/gz/worlds"])
+    print('copy sdf')
+    subprocess.run(["cp", "./config/AbuDhabi.sdf", "./dronesim/drone/px4/Tools/simulation/gz/worlds/default.sdf"])
 
 # check whether the px4_msgs source code is included in the drone/onboard folder
 if not os.path.isdir("./dronesim/drone/onboard/src/px4_msgs"):
