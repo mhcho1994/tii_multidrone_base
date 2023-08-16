@@ -3,4 +3,6 @@
 /dronesim/drone/onboard/src/px4_msgs
 
 # ROS2 build and workspace
-/dronesim/drone/onboard
+/dronesim/drone/onboard/build
+/dronesim/drone/onbaord/install
+/dronesim/drone/onboard/log
